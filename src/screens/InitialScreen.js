@@ -1,18 +1,41 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {Text, Button} from 'react-native-elements';
+
+export const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+  },
+  text: {
+    textAlign: 'center',
+    paddingTop: 100,
+    paddingBottom: 50,
+  },
+  button: {
+    paddingTop: 50,
+  },
+  input: {
+    textAlignVertical: 'top',
+    paddingTop: 50,
+  },
+});
 
 export default function InitialScreen({navigation}) {
   return (
-    <View>
-      <Text h1>COVID Community Action</Text>
+    <View style={styles.container}>
+      <Text h1 style={styles.text}>
+        COVID Community Action
+      </Text>
       <Button
-        title="register"
+        style={styles.button}
+        title="Register"
         onPress={() => navigation.navigate('Register')}
       />
-      <Text onPress={() => navigation.navigate('SignIn')} h3>
-        Already registered? Sign in by clicking this text
-      </Text>
+      <Button
+        style={styles.button}
+        title="sign In"
+        onPress={() => navigation.navigate('SignIn')}
+      />
     </View>
   );
 }

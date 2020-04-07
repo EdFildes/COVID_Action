@@ -10,14 +10,14 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
 
 const switchNavigator = createSwitchNavigator({
-  userFlow: createBottomTabNavigator({
-    Link: LinkScreen,
-    Profile: ProfileScreen,
-  }),
   loginFlow: createStackNavigator({
     Initial: InitialScreen,
     Register: RegisterScreen,
     SignIn: SignInScreen,
+  }),
+  userFlow: createBottomTabNavigator({
+    Link: LinkScreen,
+    Profile: ProfileScreen,
   }),
 });
 

@@ -1,6 +1,7 @@
 import React, {useState, useContext} from 'react';
 import {Context as authContext} from './../context/AuthContext';
 import {Input, Button, Text} from 'react-native-elements';
+import {styles} from './InitialScreen';
 
 export default function RegisterScreen() {
   const {state, register} = useContext(authContext);
@@ -8,7 +9,9 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   return (
     <>
-      <Text h2>Register to volunteer</Text>
+      <Text h2 style={styles.text}>
+        Register to volunteer
+      </Text>
       <Input
         autoCapitalize="none"
         autoCorrect={false}
@@ -24,7 +27,11 @@ export default function RegisterScreen() {
         value={password}
         onChangeText={(newPassword) => setPassword(newPassword)}
       />
-      <Button title="Register" onPress={() => register({email, password})} />
+      <Button
+        style={styles.button}
+        title="Register"
+        onPress={() => register({email, password})}
+      />
       <Text>{state.errorMsg}</Text>
     </>
   );
