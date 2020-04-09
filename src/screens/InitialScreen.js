@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'top',
     paddingTop: 50,
   },
+  warning: {
+    color: 'red',
+  },
 });
 
 export default function InitialScreen({navigation}) {

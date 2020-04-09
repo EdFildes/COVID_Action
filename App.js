@@ -8,8 +8,9 @@ import SignInScreen from './src/screens/SignInScreen';
 import LinkScreen from './src/screens/LinkScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
+import {setNavigator} from './src/navigationRef';
 
-const switchNavigator = createSwitchNavigator({
+const switchNavigator = createSwitchNavigator({ 
   loginFlow: createStackNavigator({
     Initial: InitialScreen,
     Register: RegisterScreen,
@@ -26,7 +27,7 @@ const App = createAppContainer(switchNavigator);
 export default () => {
   return (
     <AuthProvider>
-      <App />
+      <App ref={(navigator) => setNavigator(navigator)} />
     </AuthProvider>
   );
 };

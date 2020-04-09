@@ -32,7 +32,7 @@ export default function SignInScreen() {
         title="Sign In"
         onPress={() => signIn({email, password})}
       />
-      <Text>{state.errorMsg}</Text>
+      <Text style={styles.warning}>{state.errorMsg}</Text>
     </>
   );
 }

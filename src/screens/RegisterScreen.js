@@ -32,7 +32,7 @@ export default function RegisterScreen() {
         title="Register"
         onPress={() => register({email, password})}
       />
-      <Text>{state.errorMsg}</Text>
+      <Text style={styles.warning}>{state.errorMsg}</Text>
     </>
   );
 }
