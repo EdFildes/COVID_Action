@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, Button} from 'react-native-elements';
+import {Context as authContext} from './../context/AuthContext';
 
 export const styles = StyleSheet.create({
   container: {
@@ -24,6 +25,7 @@ export const styles = StyleSheet.create({
 });
 
 export default function InitialScreen({navigation}) {
+  const {clearError} = useContext(authContext);
   return (
     <View style={styles.container}>
       <Text h1 style={styles.text}>
@@ -32,12 +34,18 @@ export default function InitialScreen({navigation}) {
       <Button
         style={styles.button}
         title="Register"
-        onPress={() => navigation.navigate('Register')}
+        onPress={() => {
+          clearError();
+          navigation.navigate('Register');
+        }}
       />
       <Button
         style={styles.button}
         title="sign In"
-        onPress={() => navigation.navigate('SignIn')}
+        onPress={() => {
+          clearError();
+          navigation.navigate('SignIn');
+        }}
       />
     </View>
   );

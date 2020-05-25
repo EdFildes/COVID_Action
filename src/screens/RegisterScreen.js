@@ -10,7 +10,7 @@ export default function RegisterScreen() {
   return (
     <>
       <Text h2 style={styles.text}>
-        Register to volunteer
+        Register to use app
       </Text>
       <Input
         autoCapitalize="none"

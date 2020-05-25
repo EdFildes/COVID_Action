@@ -1,18 +1,15 @@
-import firebaseAPI from './../api/firebase';
 import createDataContext from './createDataContext';
 import AsyncStorage from '@react-native-community/async-storage';
 import {navigate} from './../navigationRef';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const authReducer = (state, actions) => {
   switch (actions.type) {
     case 'add_Error': {
       return {...state, errorMsg: actions.payload};
     }
-    case 'register': {
-      return {token: actions.payload, errorMsg: ''};
-    }
-    case 'signIn': {
+    case 'add_Token': {
       return {token: actions.payload, errorMsg: ''};
     }
     default:
@@ -20,20 +17,24 @@ const authReducer = (state, actions) => {
   }
 };
 
+const clearError = (dispach) => () => {
+  dispach({type: 'add_Error', payload: ''});
+};
+
 const register = (dispach) => async ({email, password}) => {
   try {
-    const response = await firebaseAPI.post('/accounts:signUp', {
-      email,
-      password,
-    });
-    await AsyncStorage.setItem('token', response.data.idToken);
-    dispach({type: 'register', payload: response.data.idToken});
-    console.log(response.data.localId);
+    await auth().createUserWithEmailAndPassword(email, password);
+
+    const idTokenResult = await auth().currentUser.getIdTokenResult();
+    await AsyncStorage.setItem('token', idTokenResult.token);
+    dispach({type: 'add_Token', payload: idTokenResult.token});
+    // add a database entry for this user to create a profile with
     firestore()
       .collection('users')
-      .doc(response.data.localId)
-      .set({id: response.data.localId});
-    await AsyncStorage.setItem('id', response.data.localId);
+      .doc(idTokenResult.claims.user_id)
+      .set({id: idTokenResult.claims.user_id});
+    await AsyncStorage.setItem('id', idTokenResult.claims.user_id);
+
     navigate('userFlow');
   } catch (err) {
     dispach({type: 'add_Error', payload: err.message});
@@ -42,17 +43,15 @@ const register = (dispach) => async ({email, password}) => {
 
 const signIn = (dispach) => async ({email, password}) => {
   try {
-    const response = await firebaseAPI.post('/accounts:signInWithPassword', {
-      email,
-      password,
-      returnSecureToken: true,
-    });
-    await AsyncStorage.setItem('token', response.data.idToken);
-    dispach({type: 'signIn', payload: response.data.idToken});
-    await AsyncStorage.setItem('id', response.data.localId);
+    await auth().signInWithEmailAndPassword(email, password);
+
+    const idTokenResult = await auth().currentUser.getIdTokenResult();
+    await AsyncStorage.setItem('token', idTokenResult.token);
+    dispach({type: 'add_Token', payload: idTokenResult.token});
+    await AsyncStorage.setItem('id', idTokenResult.claims.user_id);
     navigate('userFlow');
   } catch (err) {
-    dispach({type: 'add_Error', payload: 'Invalid email/password combination'});
+    dispach({type: 'add_Error', payload: err.message});
   }
 };
 
@@ -62,6 +61,6 @@ const signOut = (dispach) => {
 
 export const {Context, Provider} = createDataContext(
   authReducer,
-  {register, signIn, signOut},
+  {register, signIn, signOut, clearError},
   {token: null, errorMsg: ''},
 );

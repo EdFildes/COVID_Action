@@ -10,7 +10,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import {Provider as AuthProvider} from './src/context/AuthContext';
 import {setNavigator} from './src/navigationRef';
 
-const switchNavigator = createSwitchNavigator({ 
+const switchNavigator = createSwitchNavigator({
   loginFlow: createStackNavigator({
     Initial: InitialScreen,
     Register: RegisterScreen,

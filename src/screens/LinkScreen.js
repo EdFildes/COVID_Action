@@ -7,14 +7,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export default function LinkScreen() {
   const [profile, setProfile] = useState('');
-  const [roleState, setRole] = useState('');
   async function getOwnData() {
     let response = await firestore()
       .collection('users')
       .doc(await AsyncStorage.getItem('id'))
-      .get();
+      .get()
+      .catch((err) => console.log(err));
     let {area, help, role} = response.data();
-    setRole(role)
     firestore()
       .collection('users')
       .where('role', '==', 'Isolated Person')
@@ -29,9 +28,7 @@ export default function LinkScreen() {
           }
         });
       })
-      .catch(function (error) {
-        console.log('Error getting documents: ', error);
-      });
+      .catch((err) => console.log(err));
   }
   getOwnData();
   let {area, name, help} = profile;
